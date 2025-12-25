@@ -2,7 +2,11 @@
   margin: 0;
   position: relative;
   display: grid;
-  grid-template-columns: minmax(240px, 2fr) minmax(170px, 1fr) minmax(200px, 1.2fr) minmax(220px, 1.5fr);
+  /* 两行布局：
+   * - 第一行：内容(占大头) + 时间
+   * - 第二行：人员(占大头) + 项目
+   */
+  grid-template-columns: minmax(280px, 1fr) minmax(220px, 320px);
   gap: 8px 12px;
   align-items: start;
 
@@ -18,6 +22,38 @@
   --milestone-focus-ring: rgba(2, 132, 199, 0.25);
   --milestone-chip-bg: #e0f2fe;
   --milestone-chip-border: #7dd3fc;
+}
+
+/* 状态颜色定义 */
+.cdx-milestone--warning {
+  --milestone-accent: #d946ef; /* 品红 */
+  --milestone-bg: #fdf4ff;
+  --milestone-border: #f5d0fe;
+}
+
+.cdx-milestone--danger {
+  --milestone-accent: #ef4444; /* 大红 */
+  --milestone-bg: #fef2f2;
+  --milestone-border: #fee2e2;
+}
+
+.cdx-milestone--critical {
+  --milestone-accent: #ef4444;
+  --milestone-bg: #fef2f2;
+  --milestone-border: #fee2e2;
+  animation: cdx-milestone-flash 1.5s infinite;
+}
+
+@keyframes cdx-milestone-flash {
+  0%, 100% {
+    background: var(--milestone-bg);
+    border-color: var(--milestone-border);
+  }
+  50% {
+    background: #fee2e2;
+    border-color: #ef4444;
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.2);
+  }
 }
 
 .cdx-milestone::before {
@@ -75,6 +111,11 @@
   color: var(--milestone-text);
 }
 
+.cdx-milestone__value--invalid {
+  border-bottom-color: #ef4444 !important;
+  color: #ef4444 !important;
+}
+
 .cdx-milestone__value[contentEditable=true][data-placeholder]::before {
   position: absolute;
   left: 2px;
@@ -116,26 +157,82 @@
   border-color: #38bdf8;
 }
 
+.cdx-milestone__chip-btn.is-active {
+  background: #bae6fd;
+  border-color: #0284c7;
+  color: #0369a1;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
 .cdx-milestone__chip-btn:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px var(--milestone-focus-ring);
 }
 
 .cdx-milestone__chooser {
-  grid-column: 1 / -1;
-  margin-top: 8px;
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 85px; /* 概略位于两行内容下方 */
+  z-index: 1000;
   background: #ffffff;
-  border: 1px solid #d3d9e2;
-  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.16);
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   padding: 10px 10px 8px;
-  max-height: 320px;
-  overflow: auto;
+  max-height: min(420px, 50vh);
+  overflow-y: auto;
+  overflow-x: hidden;
   display: none;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+/* 确保 Block 在弹出菜单打开时具有更高的层级 */
+.cdx-milestone.is-active {
+  z-index: 100;
+}
+
+.cdx-milestone__chooser::-webkit-scrollbar {
+  width: 5px;
+}
+
+.cdx-milestone__chooser::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.cdx-milestone__chooser::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 10px;
 }
 
 .cdx-milestone__chooser.is-open {
   display: block;
+}
+
+.cdx-milestone__chooser[data-mode="project"] .cdx-milestone__chooser-input,
+.cdx-milestone__chooser[data-mode="project"] .cdx-milestone__chooser-close,
+.cdx-milestone__chooser[data-mode="people"] .cdx-milestone__chooser-input,
+.cdx-milestone__chooser[data-mode="people"] .cdx-milestone__chooser-footer {
+  display: none;
+}
+
+.cdx-milestone__chooser[data-mode="project"] .cdx-milestone__chooser-list,
+.cdx-milestone__chooser[data-mode="people"] .cdx-milestone__chooser-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+}
+
+.cdx-milestone__chooser[data-mode="project"] .cdx-milestone__chooser-item,
+.cdx-milestone__chooser[data-mode="people"] .cdx-milestone__chooser-item {
+  width: fit-content;
+  max-width: 100%;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow: visible;
+  text-overflow: unset;
 }
 
 .cdx-milestone__chooser-header {
@@ -238,13 +335,13 @@
 
 @media (max-width: 1100px) {
   .cdx-milestone {
-    grid-template-columns: minmax(240px, 2fr) minmax(180px, 1fr) minmax(240px, 1.5fr);
+    grid-template-columns: minmax(260px, 1fr) minmax(220px, 300px);
   }
 }
 
 @media (max-width: 820px) {
   .cdx-milestone {
-    grid-template-columns: minmax(240px, 2fr) minmax(180px, 1fr);
+    grid-template-columns: 1fr;
   }
   .cdx-milestone__chooser-list {
     grid-template-columns: repeat(2, minmax(160px, 1fr));

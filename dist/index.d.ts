@@ -50,9 +50,18 @@ export default class Milestone implements BlockTool {
     private block;
     private config;
     private data;
+    /**
+     * Editor.js 只读模式支持声明：
+     * - Editor.js 在切换 readOnly 时会校验“所有已连接工具”是否支持只读
+     * - 若未声明，将导致 `To enable read-only mode... Tools milestone don't support read-only mode.`
+     */
+    static get isReadOnlySupported(): boolean;
     private css;
     private wrapper?;
     private fieldEls;
+    private timePickerInput?;
+    private peopleBtn?;
+    private projectBtn?;
     private chooserEl?;
     private chooserInputEl?;
     private chooserListEl?;
@@ -75,6 +84,11 @@ export default class Milestone implements BlockTool {
     private buildChooser;
     private openChooser;
     private closeChooser;
+    /**
+     * 根据日期差值更新组件整体颜色状态
+     */
+    private updateUrgency;
+    private updateBtnStates;
     private openPeopleChooser;
     private openProjectChooser;
     private getTextFieldValue;

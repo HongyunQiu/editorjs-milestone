@@ -49,6 +49,7 @@ interface MilestoneCSS {
   label: string;
   labelIcon: string;
   value: string;
+  valueInvalid: string;
   chipBtn: string;
   chooser: string;
   chooserHeader: string;
@@ -81,6 +82,54 @@ function stripToText(el: HTMLElement): string {
   return String(t || '').replace(/\u00A0/g, ' ').trim();
 }
 
+/**
+ * 校验日期格式是否为 YYYY-MM-DD，并且是一个真实的合法日期
+ */
+function isValidDateFormat(v: string): boolean {
+  const s = (v || '').trim();
+  if (!s) return true; // 允许为空
+
+  // 首先匹配基础格式
+  const match = s.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!match) return false;
+
+  const year = parseInt(match[1], 10);
+  const month = parseInt(match[2], 10);
+  const day = parseInt(match[3], 10);
+
+  // 检查月份范围
+  if (month < 1 || month > 12) return false;
+
+  // 使用 Date 对象检查日期的合法性（JS 的 Date 会自动进位，所以需要比对回原值）
+  const date = new Date(year, month - 1, day);
+  return (
+    date.getFullYear() === year &&
+    date.getMonth() === month - 1 &&
+    date.getDate() === day
+  );
+}
+
+function normalizeDateTimeLocalToLabel(v: string): string {
+  const s = (v || '').trim();
+  if (!s) return '';
+  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!m) return s;
+  const [, y, mo, d] = m;
+  return `${y}-${mo}-${d}`;
+}
+
+function parseLabelToDateTimeLocalValue(label: string): string {
+  // 支持：YYYY-MM-DD
+  const s = (label || '').trim();
+  if (!s) return '';
+  const m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (m) {
+    const [, y, mo, d] = m;
+    return `${y}-${mo}-${d}`;
+  }
+  return '';
+}
+
 export default class Milestone implements BlockTool {
   private api: API;
   private readOnly: boolean;
@@ -88,12 +137,22 @@ export default class Milestone implements BlockTool {
   private config: MilestoneConfig;
   private data: MilestoneData;
 
+  /**
+   * Editor.js 只读模式支持声明：
+   * - Editor.js 在切换 readOnly 时会校验“所有已连接工具”是否支持只读
+   * - 若未声明，将导致 `To enable read-only mode... Tools milestone don't support read-only mode.`
+   */
+  static get isReadOnlySupported() {
+    return true;
+  }
+
   private css: MilestoneCSS = {
     wrapper: 'cdx-milestone',
     item: 'cdx-milestone__item',
     label: 'cdx-milestone__label',
     labelIcon: 'cdx-milestone__label-icon',
     value: 'cdx-milestone__value',
+    valueInvalid: 'cdx-milestone__value--invalid',
     chipBtn: 'cdx-milestone__chip-btn',
     chooser: 'cdx-milestone__chooser',
     chooserHeader: 'cdx-milestone__chooser-header',
@@ -111,6 +170,10 @@ export default class Milestone implements BlockTool {
 
   private wrapper?: HTMLElement;
   private fieldEls: Map<MilestoneField, HTMLElement> = new Map();
+  private timePickerInput?: HTMLInputElement;
+
+  private peopleBtn?: HTMLButtonElement;
+  private projectBtn?: HTMLButtonElement;
 
   // chooser state
   private chooserEl?: HTMLElement;
@@ -176,18 +239,35 @@ export default class Milestone implements BlockTool {
       v.setAttribute('data-placeholder', placeholder);
       v.innerHTML = this.data[field] || '';
 
+      const checkValidation = () => {
+        if (field === 'time') {
+          const text = stripToText(v);
+          if (isValidDateFormat(text)) {
+            v.classList.remove(this.css.valueInvalid);
+          } else {
+            v.classList.add(this.css.valueInvalid);
+          }
+          this.updateUrgency();
+        }
+      };
+
       if (!this.readOnly) {
         v.addEventListener('input', () => {
           // 仅做轻量同步，最终以 save() 时读取为准
           // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
           (this.data as any)[field] = v.innerHTML;
+          checkValidation();
         });
         v.addEventListener('blur', () => {
           const text = stripToText(v);
           (this.data as any)[field] = toBrHtmlFromText(text);
           v.innerHTML = (this.data as any)[field] || '';
+          checkValidation();
         });
       }
+
+      // 初始校验
+      checkValidation();
 
       this.fieldEls.set(field, v);
       return v;
@@ -195,7 +275,7 @@ export default class Milestone implements BlockTool {
 
     const placeholders = {
       content: this.api.i18n.t(this.config.contentPlaceholder || '节点内容'),
-      time: this.api.i18n.t(this.config.timePlaceholder || '节点时间'),
+      time: this.api.i18n.t(this.config.timePlaceholder || 'YYYY-MM-DD'),
       people: this.api.i18n.t(this.config.peoplePlaceholder || '相关人员'),
       projectName: this.api.i18n.t(this.config.projectNamePlaceholder || '项目名称'),
     };
@@ -212,7 +292,72 @@ export default class Milestone implements BlockTool {
     {
       const item = make('div', [this.css.item]) as HTMLElement;
       item.appendChild(makeLabel(this.api.i18n.t('时间'), IconDotCircle));
-      item.appendChild(makeValue('time', placeholders.time));
+      const timeValue = makeValue('time', placeholders.time);
+      item.appendChild(timeValue);
+
+      // 时间规范化输入：透明 date 覆盖在按钮上
+      if (!this.readOnly) {
+        const container = make('div', [], {
+          style: 'position: relative; display: inline-flex; align-items: center; isolation: isolate;'
+        });
+
+        const btn = make('button', [this.css.chipBtn], { type: 'button' }) as HTMLButtonElement;
+        btn.textContent = this.api.i18n.t('选择');
+
+        const picker = document.createElement('input');
+        picker.type = 'date';
+        picker.style.position = 'absolute';
+        picker.style.top = '0';
+        picker.style.left = '0';
+        picker.style.width = '100%';
+        picker.style.height = '100%';
+        picker.style.opacity = '0';
+        picker.style.cursor = 'pointer';
+        picker.style.zIndex = '2'; // 确保在按钮上方
+        picker.setAttribute('aria-label', this.api.i18n.t('选择日期'));
+        this.timePickerInput = picker;
+
+        const syncValue = () => {
+          try {
+            const current = stripToText(timeValue);
+            const dt = parseLabelToDateTimeLocalValue(current);
+            if (dt) picker.value = dt;
+          } catch (_) {}
+        };
+
+        // 核心逻辑：按钮点击时，通过 JS 触发 picker 的点击
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          syncValue();
+          try {
+            if (typeof (picker as any).showPicker === 'function') {
+              (picker as any).showPicker();
+            } else {
+              picker.click();
+            }
+          } catch (err) {
+            console.error('Failed to show picker:', err);
+          }
+        });
+
+        // 同时保留覆盖逻辑作为保底（如果按钮没挡住 input 的话）
+        picker.addEventListener('mousedown', syncValue);
+        picker.addEventListener('touchstart', syncValue);
+
+        picker.addEventListener('change', () => {
+          const normalized = normalizeDateTimeLocalToLabel(picker.value);
+          if (normalized) {
+            this.setFieldFromText('time', normalized);
+          }
+          // 清空，确保下次选择同一值也能触发 change
+          picker.value = '';
+        });
+
+        container.appendChild(btn);
+        container.appendChild(picker);
+        item.appendChild(container);
+      }
       wrapper.appendChild(item);
     }
 
@@ -225,6 +370,7 @@ export default class Milestone implements BlockTool {
         const btn = make('button', [this.css.chipBtn], {
           type: 'button',
         }) as HTMLButtonElement;
+        this.peopleBtn = btn;
         btn.textContent = this.api.i18n.t('选择');
         btn.addEventListener('click', () => this.openPeopleChooser());
         item.appendChild(btn);
@@ -241,6 +387,7 @@ export default class Milestone implements BlockTool {
         const btn = make('button', [this.css.chipBtn], {
           type: 'button',
         }) as HTMLButtonElement;
+        this.projectBtn = btn;
         btn.textContent = this.api.i18n.t('选择');
         btn.addEventListener('click', () => this.openProjectChooser());
         item.appendChild(btn);
@@ -276,8 +423,14 @@ export default class Milestone implements BlockTool {
   }
 
   validate(savedData: MilestoneData): boolean {
-    // 允许全空（用户可能只是插入占位块）
     if (!savedData || typeof savedData !== 'object') return false;
+
+    // 校验时间格式（如果填了的话）
+    const timeText = (savedData.time || '').replace(/<[^>]+>/g, '').trim();
+    if (timeText && !isValidDateFormat(timeText)) {
+      return false;
+    }
+
     return true;
   }
 
@@ -304,14 +457,10 @@ export default class Milestone implements BlockTool {
     });
 
     const spacer = make('div', [this.css.chooserSpacer]) as HTMLElement;
-    const close = make('button', [this.css.chooserClose], { type: 'button' }) as HTMLButtonElement;
-    close.textContent = this.api.i18n.t('关闭');
-    close.addEventListener('click', () => this.closeChooser());
 
     header.appendChild(title);
     header.appendChild(spacer);
     header.appendChild(input);
-    header.appendChild(close);
     chooser.appendChild(header);
 
     const list = make('div', [this.css.chooserList]) as HTMLElement;
@@ -329,11 +478,27 @@ export default class Milestone implements BlockTool {
     if (!this.chooserEl || !this.chooserInputEl || !this.chooserListEl || !this.chooserTitleEl || !this.chooserFooterEl) {
       return;
     }
+
+    // 如果已经是该模式，则切换关闭
+    if (this.chooserMode === mode) {
+      this.closeChooser();
+      return;
+    }
+
     this.chooserMode = mode;
+    this.chooserEl.dataset.mode = mode;
     this.chooserEl.classList.add('is-open');
 
+    // 更新按钮状态
+    this.updateBtnStates();
+
     this.chooserInputEl.value = '';
-    this.chooserInputEl.focus();
+    // project 或 people 模式下不聚焦输入框（它们现在都隐藏了搜索栏）
+    if (mode === 'people' || mode === 'project') {
+      // 不聚焦
+    } else {
+      this.chooserInputEl.focus();
+    }
 
     if (this.chooserHintEl) {
       this.chooserHintEl.style.display = mode === 'people' ? '' : 'none';
@@ -357,7 +522,69 @@ export default class Milestone implements BlockTool {
   private closeChooser() {
     if (!this.chooserEl) return;
     this.chooserEl.classList.remove('is-open');
+    try { delete this.chooserEl.dataset.mode; } catch (_) {}
     this.chooserMode = null;
+    this.updateBtnStates();
+  }
+
+  /**
+   * 根据日期差值更新组件整体颜色状态
+   */
+  private updateUrgency() {
+    if (!this.wrapper) return;
+
+    // 清除所有状态类
+    this.wrapper.classList.remove('cdx-milestone--warning', 'cdx-milestone--danger', 'cdx-milestone--critical');
+
+    const timeEl = this.fieldEls.get('time');
+    const timeText = timeEl ? stripToText(timeEl) : '';
+    
+    // 如果没有日期或者格式不对，恢复默认颜色（蓝色）
+    if (!timeText || !isValidDateFormat(timeText)) return;
+
+    const parts = timeText.split('-');
+    const milestoneDate = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // 计算天数差 (里程碑日期 - 今天)
+    const diffMs = milestoneDate.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+    if (diffDays <= 3) {
+      // 3天内或已过期：闪烁大红
+      this.wrapper.classList.add('cdx-milestone--critical');
+    } else if (diffDays <= 7) {
+      // 3-7天：大红
+      this.wrapper.classList.add('cdx-milestone--danger');
+    } else if (diffDays <= 14) {
+      // 7-14天：品红
+      this.wrapper.classList.add('cdx-milestone--warning');
+    }
+    // 14天以上：保持默认蓝色
+  }
+
+  private updateBtnStates() {
+    if (this.chooserMode) {
+      this.wrapper?.classList.add('is-active');
+    } else {
+      this.wrapper?.classList.remove('is-active');
+    }
+
+    if (this.peopleBtn) {
+      if (this.chooserMode === 'people') {
+        this.peopleBtn.classList.add('is-active');
+      } else {
+        this.peopleBtn.classList.remove('is-active');
+      }
+    }
+    if (this.projectBtn) {
+      if (this.chooserMode === 'project') {
+        this.projectBtn.classList.add('is-active');
+      } else {
+        this.projectBtn.classList.remove('is-active');
+      }
+    }
   }
 
   private openPeopleChooser() {
@@ -380,6 +607,15 @@ export default class Milestone implements BlockTool {
     (this.data as any)[field] = html;
     if (el) {
       el.innerHTML = html;
+      // 触发校验逻辑（清除或添加错误样式）
+      if (field === 'time') {
+        if (isValidDateFormat(text)) {
+          el.classList.remove(this.css.valueInvalid);
+        } else {
+          el.classList.add(this.css.valueInvalid);
+        }
+        this.updateUrgency();
+      }
     }
   }
 
@@ -423,21 +659,7 @@ export default class Milestone implements BlockTool {
   private renderPeopleFooter() {
     if (!this.chooserFooterEl) return;
     this.chooserFooterEl.innerHTML = '';
-
-    const cancel = make('button', [this.css.btn], { type: 'button' }) as HTMLButtonElement;
-    cancel.textContent = this.api.i18n.t('取消');
-    cancel.addEventListener('click', () => this.closeChooser());
-
-    const apply = make('button', [this.css.btn, this.css.btnPrimary], { type: 'button' }) as HTMLButtonElement;
-    apply.textContent = this.api.i18n.t('应用');
-    apply.addEventListener('click', () => {
-      const list = Array.from(this.selectedPeople.values()).filter(Boolean);
-      this.setFieldFromText('people', list.join('、'));
-      this.closeChooser();
-    });
-
-    this.chooserFooterEl.appendChild(cancel);
-    this.chooserFooterEl.appendChild(apply);
+    // 已移除“取消”和“应用”按钮，改为点击即生效
   }
 
   private renderPeopleList(users: Array<{ id: number; label: string }>, q: string) {
@@ -471,6 +693,10 @@ export default class Milestone implements BlockTool {
           this.selectedPeople.add(u.label);
           item.classList.add('is-selected');
         }
+
+        // 实时同步到填写栏
+        const list = Array.from(this.selectedPeople.values()).filter(Boolean);
+        this.setFieldFromText('people', list.join('、'));
       });
       this.chooserListEl!.appendChild(item);
     });
@@ -492,11 +718,6 @@ export default class Milestone implements BlockTool {
   private renderProjectFooter() {
     if (!this.chooserFooterEl) return;
     this.chooserFooterEl.innerHTML = '';
-
-    const close = make('button', [this.css.btn], { type: 'button' }) as HTMLButtonElement;
-    close.textContent = this.api.i18n.t('关闭');
-    close.addEventListener('click', () => this.closeChooser());
-    this.chooserFooterEl.appendChild(close);
   }
 
   private async queryAndRenderProjects(q: string) {
