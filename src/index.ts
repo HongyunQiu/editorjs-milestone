@@ -31,6 +31,7 @@ export interface MilestoneData {
   time: string;
   people: string;
   projectName: string;
+  completed?: boolean;
 }
 
 interface MilestoneParams {
@@ -41,7 +42,7 @@ interface MilestoneParams {
   block: BlockAPI;
 }
 
-type MilestoneField = keyof MilestoneData;
+type MilestoneField = 'content' | 'time' | 'people' | 'projectName';
 
 interface MilestoneCSS {
   wrapper: string;
@@ -63,6 +64,7 @@ interface MilestoneCSS {
   btn: string;
   btnPrimary: string;
   hint: string;
+  completedToggle: string;
 }
 
 function toBrHtmlFromText(text: string): string {
@@ -166,6 +168,7 @@ export default class Milestone implements BlockTool {
     btn: 'cdx-milestone__btn',
     btnPrimary: 'primary',
     hint: 'cdx-milestone__hint',
+    completedToggle: 'cdx-milestone__completed-toggle',
   };
 
   private wrapper?: HTMLElement;
@@ -216,6 +219,7 @@ export default class Milestone implements BlockTool {
       time: safe(data && data.time),
       people: safe(data && data.people),
       projectName: safe(data && data.projectName),
+      completed: !!(data && data.completed),
     };
   }
 
@@ -266,10 +270,11 @@ export default class Milestone implements BlockTool {
         });
       }
 
+      this.fieldEls.set(field, v);
+
       // 初始校验
       checkValidation();
 
-      this.fieldEls.set(field, v);
       return v;
     };
 
@@ -397,11 +402,30 @@ export default class Milestone implements BlockTool {
 
     if (!this.readOnly) {
       wrapper.appendChild(this.buildChooser());
-      const hint = make('div', [this.css.hint]) as HTMLElement;
-      hint.textContent = this.api.i18n.t('提示：人员可多选；项目名称来自历史 milestone 块的全局查询。');
-      this.chooserHintEl = hint;
-      wrapper.appendChild(hint);
+      const hintRow = make('div', [this.css.hint]) as HTMLElement;
+      
+      const hintText = make('span');
+      hintText.textContent = this.api.i18n.t('提示：人员可多选；项目名称来自历史 milestone 块的全局查询。');
+      hintRow.appendChild(hintText);
+
+      const toggle = make('label', [this.css.completedToggle]) as HTMLLabelElement;
+      const checkbox = make('input', [], { type: 'checkbox' }) as HTMLInputElement;
+      checkbox.checked = !!this.data.completed;
+      checkbox.addEventListener('change', () => {
+        this.data.completed = checkbox.checked;
+        this.updateUrgency();
+      });
+      
+      toggle.appendChild(checkbox);
+      toggle.appendChild(document.createTextNode(this.api.i18n.t('已完成')));
+      hintRow.appendChild(toggle);
+
+      this.chooserHintEl = hintRow;
+      wrapper.appendChild(hintRow);
     }
+
+    // 确保初始化时即计算颜色状态
+    this.updateUrgency();
 
     return wrapper;
   }
@@ -419,6 +443,7 @@ export default class Milestone implements BlockTool {
       time: pick('time'),
       people: pick('people'),
       projectName: pick('projectName'),
+      completed: this.data.completed,
     };
   }
 
@@ -534,7 +559,13 @@ export default class Milestone implements BlockTool {
     if (!this.wrapper) return;
 
     // 清除所有状态类
-    this.wrapper.classList.remove('cdx-milestone--warning', 'cdx-milestone--danger', 'cdx-milestone--critical');
+    this.wrapper.classList.remove('cdx-milestone--warning', 'cdx-milestone--danger', 'cdx-milestone--critical', 'cdx-milestone--completed');
+
+    // 如果已完成，直接显示完成状态，不再计算日期紧迫度
+    if (this.data.completed) {
+      this.wrapper.classList.add('cdx-milestone--completed');
+      return;
+    }
 
     const timeEl = this.fieldEls.get('time');
     const timeText = timeEl ? stripToText(timeEl) : '';

@@ -36,6 +36,7 @@ export interface MilestoneData {
     time: string;
     people: string;
     projectName: string;
+    completed?: boolean;
 }
 interface MilestoneParams {
     data: MilestoneData;

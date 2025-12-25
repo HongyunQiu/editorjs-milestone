@@ -44,6 +44,13 @@
   animation: cdx-milestone-flash 1.5s infinite;
 }
 
+.cdx-milestone--completed {
+  --milestone-accent: #10b981; /* 绿色 */
+  --milestone-bg: #f0fdf4;
+  --milestone-border: #dcfce7;
+  animation: none !important; /* 完成后停止闪烁 */
+}
+
 @keyframes cdx-milestone-flash {
   0%, 100% {
     background: var(--milestone-bg);
@@ -331,6 +338,25 @@
   font-size: 12px;
   line-height: 1.4;
   user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cdx-milestone__completed-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  color: var(--milestone-muted);
+  font-weight: 500;
+}
+
+.cdx-milestone__completed-toggle input {
+  cursor: pointer;
+  margin: 0;
+  width: 14px;
+  height: 14px;
 }
 
 @media (max-width: 1100px) {

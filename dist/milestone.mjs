@@ -1,4 +1,4 @@
-(function(){"use strict";try{if(typeof document<"u"){var e=document.createElement("style");e.appendChild(document.createTextNode('.cdx-milestone{margin:0;position:relative;display:grid;grid-template-columns:minmax(280px,1fr) minmax(220px,320px);gap:8px 12px;align-items:start;border:1px solid var(--milestone-border, #bae6fd);background:var(--milestone-bg, #f0f9ff);border-radius:10px;padding:10px 12px 12px;--milestone-accent: #0284c7;--milestone-text: #0f172a;--milestone-muted: #475569;--milestone-focus-ring: rgba(2, 132, 199, .25);--milestone-chip-bg: #e0f2fe;--milestone-chip-border: #7dd3fc}.cdx-milestone--warning{--milestone-accent: #d946ef;--milestone-bg: #fdf4ff;--milestone-border: #f5d0fe}.cdx-milestone--danger{--milestone-accent: #ef4444;--milestone-bg: #fef2f2;--milestone-border: #fee2e2}.cdx-milestone--critical{--milestone-accent: #ef4444;--milestone-bg: #fef2f2;--milestone-border: #fee2e2;animation:cdx-milestone-flash 1.5s infinite}@keyframes cdx-milestone-flash{0%,to{background:var(--milestone-bg);border-color:var(--milestone-border)}50%{background:#fee2e2;border-color:#ef4444;box-shadow:0 0 8px #ef444433}}.cdx-milestone:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:10px 0 0 10px;background:var(--milestone-accent)}.cdx-milestone__item{display:flex;align-items:baseline;gap:8px;min-width:0}.cdx-milestone__label{display:inline-flex;align-items:center;gap:6px;color:var(--milestone-muted);font-size:12px;line-height:1.4;white-space:nowrap;flex:0 0 auto;-webkit-user-select:none;user-select:none}.cdx-milestone__label-icon{width:14px;height:14px;display:inline-flex;align-items:center;justify-content:center;color:var(--milestone-accent)}.cdx-milestone__value{position:relative;flex:1 1 auto;min-width:60px;min-height:22px;padding:0 2px 2px;border:none!important;border-bottom:1px solid rgba(2,132,199,.35)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;outline:none;line-height:1.5;color:var(--milestone-text)}.cdx-milestone__value--invalid{border-bottom-color:#ef4444!important;color:#ef4444!important}.cdx-milestone__value[contentEditable=true][data-placeholder]:before{position:absolute;left:2px;bottom:2px;content:attr(data-placeholder);color:#475569b3;opacity:0;pointer-events:none}.cdx-milestone__value[contentEditable=true][data-placeholder]:empty:before{opacity:1}.cdx-milestone__value[contentEditable=true][data-placeholder]:empty:focus:before{opacity:0}.cdx-milestone__value[contentEditable=true]:focus{border-bottom-color:var(--milestone-accent)!important;box-shadow:0 2px #0284c72e}.cdx-milestone__chip-btn{flex:0 0 auto;border:1px solid var(--milestone-chip-border);background:var(--milestone-chip-bg);color:#075985;border-radius:999px;padding:2px 8px;font-size:12px;line-height:1.4;cursor:pointer;-webkit-user-select:none;user-select:none}.cdx-milestone__chip-btn:hover{background:#bae6fd;border-color:#38bdf8}.cdx-milestone__chip-btn.is-active{background:#bae6fd;border-color:#0284c7;color:#0369a1;box-shadow:inset 0 2px 4px #0000000d}.cdx-milestone__chip-btn:focus-visible{outline:none;box-shadow:0 0 0 3px var(--milestone-focus-ring)}.cdx-milestone__chooser{position:absolute;left:12px;right:12px;top:85px;z-index:1000;background:#ffffff;border:1px solid #cbd5e1;box-shadow:0 10px 25px -5px #0000001a,0 8px 10px -6px #0000001a;border-radius:8px;padding:10px 10px 8px;max-height:min(420px,50vh);overflow-y:auto;overflow-x:hidden;display:none;scrollbar-width:thin;scrollbar-color:#cbd5e1 transparent}.cdx-milestone.is-active{z-index:100}.cdx-milestone__chooser::-webkit-scrollbar{width:5px}.cdx-milestone__chooser::-webkit-scrollbar-track{background:transparent}.cdx-milestone__chooser::-webkit-scrollbar-thumb{background-color:#cbd5e1;border-radius:10px}.cdx-milestone__chooser.is-open{display:block}.cdx-milestone__chooser[data-mode=project] .cdx-milestone__chooser-input,.cdx-milestone__chooser[data-mode=project] .cdx-milestone__chooser-close,.cdx-milestone__chooser[data-mode=people] .cdx-milestone__chooser-input,.cdx-milestone__chooser[data-mode=people] .cdx-milestone__chooser-footer{display:none}.cdx-milestone__chooser[data-mode=project] .cdx-milestone__chooser-list,.cdx-milestone__chooser[data-mode=people] .cdx-milestone__chooser-list{display:flex;flex-wrap:wrap;gap:6px 8px}.cdx-milestone__chooser[data-mode=project] .cdx-milestone__chooser-item,.cdx-milestone__chooser[data-mode=people] .cdx-milestone__chooser-item{width:fit-content;max-width:100%;display:inline-flex;align-items:center;white-space:nowrap;overflow:visible;text-overflow:unset}.cdx-milestone__chooser-header{display:flex;gap:8px;align-items:center;margin-bottom:8px}.cdx-milestone__chooser-title{font-size:12px;font-weight:700;color:#0f172a;-webkit-user-select:none;user-select:none}.cdx-milestone__chooser-spacer{flex:1}.cdx-milestone__chooser-input{flex:1;min-width:140px;font-size:13px;padding:6px 8px;border-radius:6px;border:1px solid #d3d9e2}.cdx-milestone__chooser-close{border:1px solid #e2e8f0;background:#f8fafc;color:#334155;border-radius:8px;padding:4px 10px;font-size:12px;cursor:pointer}.cdx-milestone__chooser-list{display:grid;grid-template-columns:repeat(4,minmax(160px,1fr));gap:6px 8px}.cdx-milestone__chooser-item{border:1px solid #e2e8f0;background:#ffffff;border-radius:8px;padding:6px 8px;cursor:pointer;font-size:13px;line-height:1.4;color:#0f172a;-webkit-user-select:none;user-select:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.cdx-milestone__chooser-item:hover{background:#f1f5f9}.cdx-milestone__chooser-item.is-selected{border-color:#38bdf8;background:#e0f2fe}.cdx-milestone__chooser-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}.cdx-milestone__btn{font-size:12px;line-height:1.4;padding:6px 12px;border-radius:8px;border:1px solid #d3d9e2;background:#ffffff;cursor:pointer}.cdx-milestone__btn.primary{border-color:#38bdf8;background:#0284c7;color:#fff}.cdx-milestone__hint{grid-column:1 / -1;color:#64748b;font-size:12px;line-height:1.4;-webkit-user-select:none;user-select:none}@media (max-width: 1100px){.cdx-milestone{grid-template-columns:minmax(260px,1fr) minmax(220px,300px)}}@media (max-width: 820px){.cdx-milestone{grid-template-columns:1fr}.cdx-milestone__chooser-list{grid-template-columns:repeat(2,minmax(160px,1fr))}}@media (max-width: 560px){.cdx-milestone,.cdx-milestone__chooser-list{grid-template-columns:1fr}}')),document.head.appendChild(e)}}catch(o){console.error("vite-plugin-css-injected-by-js",o)}})();
+(function(){"use strict";try{if(typeof document<"u"){var e=document.createElement("style");e.appendChild(document.createTextNode('.cdx-milestone{margin:0;position:relative;display:grid;grid-template-columns:minmax(280px,1fr) minmax(220px,320px);gap:8px 12px;align-items:start;border:1px solid var(--milestone-border, #bae6fd);background:var(--milestone-bg, #f0f9ff);border-radius:10px;padding:10px 12px 12px;--milestone-accent: #0284c7;--milestone-text: #0f172a;--milestone-muted: #475569;--milestone-focus-ring: rgba(2, 132, 199, .25);--milestone-chip-bg: #e0f2fe;--milestone-chip-border: #7dd3fc}.cdx-milestone--warning{--milestone-accent: #d946ef;--milestone-bg: #fdf4ff;--milestone-border: #f5d0fe}.cdx-milestone--danger{--milestone-accent: #ef4444;--milestone-bg: #fef2f2;--milestone-border: #fee2e2}.cdx-milestone--critical{--milestone-accent: #ef4444;--milestone-bg: #fef2f2;--milestone-border: #fee2e2;animation:cdx-milestone-flash 1.5s infinite}.cdx-milestone--completed{--milestone-accent: #10b981;--milestone-bg: #f0fdf4;--milestone-border: #dcfce7;animation:none!important}@keyframes cdx-milestone-flash{0%,to{background:var(--milestone-bg);border-color:var(--milestone-border)}50%{background:#fee2e2;border-color:#ef4444;box-shadow:0 0 8px #ef444433}}.cdx-milestone:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:10px 0 0 10px;background:var(--milestone-accent)}.cdx-milestone__item{display:flex;align-items:baseline;gap:8px;min-width:0}.cdx-milestone__label{display:inline-flex;align-items:center;gap:6px;color:var(--milestone-muted);font-size:12px;line-height:1.4;white-space:nowrap;flex:0 0 auto;-webkit-user-select:none;user-select:none}.cdx-milestone__label-icon{width:14px;height:14px;display:inline-flex;align-items:center;justify-content:center;color:var(--milestone-accent)}.cdx-milestone__value{position:relative;flex:1 1 auto;min-width:60px;min-height:22px;padding:0 2px 2px;border:none!important;border-bottom:1px solid rgba(2,132,199,.35)!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;outline:none;line-height:1.5;color:var(--milestone-text)}.cdx-milestone__value--invalid{border-bottom-color:#ef4444!important;color:#ef4444!important}.cdx-milestone__value[contentEditable=true][data-placeholder]:before{position:absolute;left:2px;bottom:2px;content:attr(data-placeholder);color:#475569b3;opacity:0;pointer-events:none}.cdx-milestone__value[contentEditable=true][data-placeholder]:empty:before{opacity:1}.cdx-milestone__value[contentEditable=true][data-placeholder]:empty:focus:before{opacity:0}.cdx-milestone__value[contentEditable=true]:focus{border-bottom-color:var(--milestone-accent)!important;box-shadow:0 2px #0284c72e}.cdx-milestone__chip-btn{flex:0 0 auto;border:1px solid var(--milestone-chip-border);background:var(--milestone-chip-bg);color:#075985;border-radius:999px;padding:2px 8px;font-size:12px;line-height:1.4;cursor:pointer;-webkit-user-select:none;user-select:none}.cdx-milestone__chip-btn:hover{background:#bae6fd;border-color:#38bdf8}.cdx-milestone__chip-btn.is-active{background:#bae6fd;border-color:#0284c7;color:#0369a1;box-shadow:inset 0 2px 4px #0000000d}.cdx-milestone__chip-btn:focus-visible{outline:none;box-shadow:0 0 0 3px var(--milestone-focus-ring)}.cdx-milestone__chooser{position:absolute;left:12px;right:12px;top:85px;z-index:1000;background:#ffffff;border:1px solid #cbd5e1;box-shadow:0 10px 25px -5px #0000001a,0 8px 10px -6px #0000001a;border-radius:8px;padding:10px 10px 8px;max-height:min(420px,50vh);overflow-y:auto;overflow-x:hidden;display:none;scrollbar-width:thin;scrollbar-color:#cbd5e1 transparent}.cdx-milestone.is-active{z-index:100}.cdx-milestone__chooser::-webkit-scrollbar{width:5px}.cdx-milestone__chooser::-webkit-scrollbar-track{background:transparent}.cdx-milestone__chooser::-webkit-scrollbar-thumb{background-color:#cbd5e1;border-radius:10px}.cdx-milestone__chooser.is-open{display:block}.cdx-milestone__chooser[data-mode=project] .cdx-milestone__chooser-input,.cdx-milestone__chooser[data-mode=project] .cdx-milestone__chooser-close,.cdx-milestone__chooser[data-mode=people] .cdx-milestone__chooser-input,.cdx-milestone__chooser[data-mode=people] .cdx-milestone__chooser-footer{display:none}.cdx-milestone__chooser[data-mode=project] .cdx-milestone__chooser-list,.cdx-milestone__chooser[data-mode=people] .cdx-milestone__chooser-list{display:flex;flex-wrap:wrap;gap:6px 8px}.cdx-milestone__chooser[data-mode=project] .cdx-milestone__chooser-item,.cdx-milestone__chooser[data-mode=people] .cdx-milestone__chooser-item{width:fit-content;max-width:100%;display:inline-flex;align-items:center;white-space:nowrap;overflow:visible;text-overflow:unset}.cdx-milestone__chooser-header{display:flex;gap:8px;align-items:center;margin-bottom:8px}.cdx-milestone__chooser-title{font-size:12px;font-weight:700;color:#0f172a;-webkit-user-select:none;user-select:none}.cdx-milestone__chooser-spacer{flex:1}.cdx-milestone__chooser-input{flex:1;min-width:140px;font-size:13px;padding:6px 8px;border-radius:6px;border:1px solid #d3d9e2}.cdx-milestone__chooser-close{border:1px solid #e2e8f0;background:#f8fafc;color:#334155;border-radius:8px;padding:4px 10px;font-size:12px;cursor:pointer}.cdx-milestone__chooser-list{display:grid;grid-template-columns:repeat(4,minmax(160px,1fr));gap:6px 8px}.cdx-milestone__chooser-item{border:1px solid #e2e8f0;background:#ffffff;border-radius:8px;padding:6px 8px;cursor:pointer;font-size:13px;line-height:1.4;color:#0f172a;-webkit-user-select:none;user-select:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.cdx-milestone__chooser-item:hover{background:#f1f5f9}.cdx-milestone__chooser-item.is-selected{border-color:#38bdf8;background:#e0f2fe}.cdx-milestone__chooser-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:10px}.cdx-milestone__btn{font-size:12px;line-height:1.4;padding:6px 12px;border-radius:8px;border:1px solid #d3d9e2;background:#ffffff;cursor:pointer}.cdx-milestone__btn.primary{border-color:#38bdf8;background:#0284c7;color:#fff}.cdx-milestone__hint{grid-column:1 / -1;color:#64748b;font-size:12px;line-height:1.4;-webkit-user-select:none;user-select:none;display:flex;align-items:center;justify-content:space-between}.cdx-milestone__completed-toggle{display:inline-flex;align-items:center;gap:4px;cursor:pointer;color:var(--milestone-muted);font-weight:500}.cdx-milestone__completed-toggle input{cursor:pointer;margin:0;width:14px;height:14px}@media (max-width: 1100px){.cdx-milestone{grid-template-columns:minmax(260px,1fr) minmax(220px,300px)}}@media (max-width: 820px){.cdx-milestone{grid-template-columns:1fr}.cdx-milestone__chooser-list{grid-template-columns:repeat(2,minmax(160px,1fr))}}@media (max-width: 560px){.cdx-milestone,.cdx-milestone__chooser-list{grid-template-columns:1fr}}')),document.head.appendChild(e)}}catch(o){console.error("vite-plugin-css-injected-by-js",o)}})();
 const He = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="2"/></svg>', le = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" d="M11.8197 6.04369C11.8924 5.8925 12.1076 5.8925 12.1803 6.04369L13.9776 9.78496C14.0068 9.84564 14.0645 9.88759 14.1312 9.89657L18.2448 10.4498C18.411 10.4722 18.4776 10.6769 18.3562 10.7927L15.3535 13.6582C15.3048 13.7047 15.2827 13.7726 15.2948 13.8388L16.0398 17.922C16.0699 18.087 15.8957 18.2136 15.7481 18.1339L12 16.1124L8.25192 18.1339C8.10429 18.2136 7.93012 18.087 7.96022 17.922L8.7052 13.8388C8.71728 13.7726 8.69523 13.7047 8.64652 13.6582L5.64378 10.7927C5.52244 10.6769 5.58896 10.4722 5.7552 10.4498L9.86876 9.89657C9.93549 9.88759 9.99322 9.84564 10.0224 9.78496L11.8197 6.04369Z"/></svg>', Re = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M8 9V7.2C8 7.08954 8.08954 7 8.2 7L12 7M16 9V7.2C16 7.08954 15.9105 7 15.8 7L12 7M12 7L12 17M12 17H10M12 17H14"/></svg>', We = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-width="2" d="M12 10C12.7145 10 13.239 9.56559 13.5392 9.11536C13.844 8.65814 14 8.0841 14 7.5C14 6.9159 13.844 6.34186 13.5392 5.88464C13.239 5.43441 12.7145 5 12 5C11.2855 5 10.761 5.43441 10.4608 5.88464C10.156 6.34186 10 6.9159 10 7.5C10 8.0841 10.156 8.65814 10.4608 9.11536C10.761 9.56559 11.2855 10 12 10Z"/><ellipse cx="12" cy="16" stroke="currentColor" stroke-width="2" rx="3" ry="5" transform="rotate(-90 12 16)"/></svg>';
 var _ = typeof globalThis < "u" ? globalThis : typeof window < "u" ? window : typeof global < "u" ? global : typeof self < "u" ? self : {};
 function Ue(e) {
@@ -38,9 +38,9 @@ function qe() {
     return t.allInputsSelector;
   } });
 })(T);
-var h = {}, M = {};
-Object.defineProperty(M, "__esModule", { value: !0 });
-M.isNativeInput = Ve;
+var h = {}, k = {};
+Object.defineProperty(k, "__esModule", { value: !0 });
+k.isNativeInput = Ve;
 function Ve(e) {
   var t = [
     "INPUT",
@@ -50,14 +50,14 @@ function Ve(e) {
 }
 (function(e) {
   Object.defineProperty(e, "__esModule", { value: !0 }), e.isNativeInput = void 0;
-  var t = M;
+  var t = k;
   Object.defineProperty(e, "isNativeInput", { enumerable: !0, get: function() {
     return t.isNativeInput;
   } });
 })(h);
-var ce = {}, k = {};
-Object.defineProperty(k, "__esModule", { value: !0 });
-k.append = ze;
+var ce = {}, M = {};
+Object.defineProperty(M, "__esModule", { value: !0 });
+M.append = ze;
 function ze(e, t) {
   Array.isArray(t) ? t.forEach(function(n) {
     e.appendChild(n);
@@ -65,7 +65,7 @@ function ze(e, t) {
 }
 (function(e) {
   Object.defineProperty(e, "__esModule", { value: !0 }), e.append = void 0;
-  var t = k;
+  var t = M;
   Object.defineProperty(e, "append", { enumerable: !0, get: function() {
     return t.append;
   } });
@@ -405,9 +405,9 @@ function Pt(e, t, n) {
   } });
 })(P);
 Object.defineProperty(R, "__esModule", { value: !0 });
-R.fragmentToString = Ot;
+R.fragmentToString = Ct;
 var Lt = P;
-function Ot(e) {
+function Ct(e) {
   var t = (0, Lt.make)("div");
   return t.appendChild(e), t.innerHTML;
 }
@@ -421,10 +421,10 @@ function Ot(e) {
 var me = {}, U = {};
 Object.defineProperty(U, "__esModule", { value: !0 });
 U.getContentLength = jt;
-var Ct = h;
+var Ot = h;
 function jt(e) {
   var t, n;
-  return (0, Ct.isNativeInput)(e) ? e.value.length : e.nodeType === Node.TEXT_NODE ? e.length : (n = (t = e.textContent) === null || t === void 0 ? void 0 : t.length) !== null && n !== void 0 ? n : 0;
+  return (0, Ot.isNativeInput)(e) ? e.value.length : e.nodeType === Node.TEXT_NODE ? e.length : (n = (t = e.textContent) === null || t === void 0 ? void 0 : t.length) !== null && n !== void 0 ? n : 0;
 }
 (function(e) {
   Object.defineProperty(e, "__esModule", { value: !0 }), e.getContentLength = void 0;
@@ -470,10 +470,10 @@ function wt(e) {
     return t.isLineBreakTag;
   } });
 })(L);
-var O = {}, K = {};
+var C = {}, K = {};
 Object.defineProperty(K, "__esModule", { value: !0 });
-K.isSingleTag = Mt;
-function Mt(e) {
+K.isSingleTag = kt;
+function kt(e) {
   return [
     "AREA",
     "BASE",
@@ -499,16 +499,16 @@ function Mt(e) {
   Object.defineProperty(e, "isSingleTag", { enumerable: !0, get: function() {
     return t.isSingleTag;
   } });
-})(O);
+})(C);
 Object.defineProperty(z, "__esModule", { value: !0 });
 z.getDeepestNode = ye;
-var kt = h, St = L, It = O;
+var Mt = h, St = L, It = C;
 function ye(e, t) {
   t === void 0 && (t = !1);
   var n = t ? "lastChild" : "firstChild", i = t ? "previousSibling" : "nextSibling";
   if (e.nodeType === Node.ELEMENT_NODE && e[n]) {
     var s = e[n];
-    if ((0, It.isSingleTag)(s) && !(0, kt.isNativeInput)(s) && !(0, St.isLineBreakTag)(s))
+    if ((0, It.isSingleTag)(s) && !(0, Mt.isNativeInput)(s) && !(0, St.isLineBreakTag)(s))
       if (s[i])
         s = s[i];
       else if (s.parentNode !== null && s.parentNode[i])
@@ -590,7 +590,7 @@ function Wt(e) {
 var te = {}, ne = {};
 Object.defineProperty(ne, "__esModule", { value: !0 });
 ne.isNodeEmpty = Yt;
-var Ut = L, qt = X, Vt = h, zt = O;
+var Ut = L, qt = X, Vt = h, zt = C;
 function Yt(e, t) {
   var n = "";
   return (0, zt.isSingleTag)(e) && !(0, Ut.isLineBreakTag)(e) ? !1 : ((0, qt.isElement)(e) && (0, Vt.isNativeInput)(e) ? n = e.value : e.textContent !== null && (n = e.textContent.replace("​", "")), t !== void 0 && (n = n.replace(new RegExp(t, "g"), "")), n.trim().length === 0);
@@ -653,7 +653,7 @@ function xt(e) {
     return t.isHTMLString;
   } });
 })(Le);
-var Oe = {}, se = {};
+var Ce = {}, se = {};
 Object.defineProperty(se, "__esModule", { value: !0 });
 se.offset = en;
 function en(e) {
@@ -671,8 +671,8 @@ function en(e) {
   Object.defineProperty(e, "offset", { enumerable: !0, get: function() {
     return t.offset;
   } });
-})(Oe);
-var Ce = {}, oe = {};
+})(Ce);
+var Oe = {}, oe = {};
 Object.defineProperty(oe, "__esModule", { value: !0 });
 oe.prepend = tn;
 function tn(e, t) {
@@ -686,7 +686,7 @@ function tn(e, t) {
   Object.defineProperty(e, "prepend", { enumerable: !0, get: function() {
     return t.prepend;
   } });
-})(Ce);
+})(Oe);
 (function(e) {
   Object.defineProperty(e, "__esModule", { value: !0 }), e.prepend = e.offset = e.make = e.isLineBreakTag = e.isSingleTag = e.isNodeEmpty = e.isLeaf = e.isHTMLString = e.isFragment = e.isEmpty = e.isElement = e.isContentEditable = e.isCollapsedWhitespaces = e.findAllInputs = e.isNativeInput = e.allInputsSelector = e.getDeepestNode = e.getDeepestBlockElements = e.getContentLength = e.fragmentToString = e.containsOnlyInlineElements = e.canSetCaret = e.calculateBaseline = e.blockElements = e.append = void 0;
   var t = T;
@@ -749,13 +749,13 @@ function tn(e, t) {
   Object.defineProperty(e, "isElement", { enumerable: !0, get: function() {
     return we.isElement;
   } });
-  var Me = Ee;
+  var ke = Ee;
   Object.defineProperty(e, "isEmpty", { enumerable: !0, get: function() {
-    return Me.isEmpty;
+    return ke.isEmpty;
   } });
-  var ke = Pe;
+  var Me = Pe;
   Object.defineProperty(e, "isFragment", { enumerable: !0, get: function() {
-    return ke.isFragment;
+    return Me.isFragment;
   } });
   var Se = Le;
   Object.defineProperty(e, "isHTMLString", { enumerable: !0, get: function() {
@@ -773,7 +773,7 @@ function tn(e, t) {
   Object.defineProperty(e, "isLineBreakTag", { enumerable: !0, get: function() {
     return Be.isLineBreakTag;
   } });
-  var $e = O;
+  var $e = C;
   Object.defineProperty(e, "isSingleTag", { enumerable: !0, get: function() {
     return $e.isSingleTag;
   } });
@@ -781,16 +781,16 @@ function tn(e, t) {
   Object.defineProperty(e, "make", { enumerable: !0, get: function() {
     return Ae.make;
   } });
-  var De = Oe;
+  var De = Ce;
   Object.defineProperty(e, "offset", { enumerable: !0, get: function() {
     return De.offset;
   } });
-  var Fe = Ce;
+  var Fe = Oe;
   Object.defineProperty(e, "prepend", { enumerable: !0, get: function() {
     return Fe.prepend;
   } });
 })(c);
-function C(e) {
+function O(e) {
   const n = (typeof e == "string" ? e : "").replace(/\r\n/g, `
 `);
   return n ? n.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br>") : "";
@@ -854,14 +854,16 @@ class sn {
       chooserFooter: "cdx-milestone__chooser-footer",
       btn: "cdx-milestone__btn",
       btnPrimary: "primary",
-      hint: "cdx-milestone__hint"
+      hint: "cdx-milestone__hint",
+      completedToggle: "cdx-milestone__completed-toggle"
     }, this.fieldEls = /* @__PURE__ */ new Map(), this.chooserMode = null, this.selectedPeople = /* @__PURE__ */ new Set(), this.selectedProject = null, this.lastChooserQueryTs = 0, this.peopleCache = null, this.peopleLoading = !1, this.api = i, this.readOnly = s, this.block = r, this.config = n || {};
     const o = (l) => typeof l == "string" ? l : "";
     this.data = {
       content: o(t && t.content),
       time: o(t && t.time),
       people: o(t && t.people),
-      projectName: o(t && t.projectName)
+      projectName: o(t && t.projectName),
+      completed: !!(t && t.completed)
     };
   }
   /**
@@ -905,8 +907,8 @@ class sn {
         this.data[r] = l.innerHTML, u();
       }), l.addEventListener("blur", () => {
         const a = v(l);
-        this.data[r] = C(a), l.innerHTML = this.data[r] || "", u();
-      })), u(), this.fieldEls.set(r, l), l;
+        this.data[r] = O(a), l.innerHTML = this.data[r] || "", u();
+      })), this.fieldEls.set(r, l), u(), l;
     }, s = {
       content: this.api.i18n.t(this.config.contentPlaceholder || "节点内容"),
       time: this.api.i18n.t(this.config.timePlaceholder || "YYYY-MM-DD"),
@@ -971,10 +973,14 @@ class sn {
     }
     if (!this.readOnly) {
       t.appendChild(this.buildChooser());
-      const r = c.make("div", [this.css.hint]);
-      r.textContent = this.api.i18n.t("提示：人员可多选；项目名称来自历史 milestone 块的全局查询。"), this.chooserHintEl = r, t.appendChild(r);
+      const r = c.make("div", [this.css.hint]), o = c.make("span");
+      o.textContent = this.api.i18n.t("提示：人员可多选；项目名称来自历史 milestone 块的全局查询。"), r.appendChild(o);
+      const l = c.make("label", [this.css.completedToggle]), u = c.make("input", [], { type: "checkbox" });
+      u.checked = !!this.data.completed, u.addEventListener("change", () => {
+        this.data.completed = u.checked, this.updateUrgency();
+      }), l.appendChild(u), l.appendChild(document.createTextNode(this.api.i18n.t("已完成"))), r.appendChild(l), this.chooserHintEl = r, t.appendChild(r);
     }
-    return t;
+    return this.updateUrgency(), t;
   }
   save() {
     const t = (n) => {
@@ -982,13 +988,14 @@ class sn {
       if (!i)
         return this.data[n] || "";
       const s = v(i);
-      return C(s);
+      return O(s);
     };
     return {
       content: t("content"),
       time: t("time"),
       people: t("people"),
-      projectName: t("projectName")
+      projectName: t("projectName"),
+      completed: this.data.completed
     };
   }
   validate(t) {
@@ -1041,7 +1048,10 @@ class sn {
   updateUrgency() {
     if (!this.wrapper)
       return;
-    this.wrapper.classList.remove("cdx-milestone--warning", "cdx-milestone--danger", "cdx-milestone--critical");
+    if (this.wrapper.classList.remove("cdx-milestone--warning", "cdx-milestone--danger", "cdx-milestone--critical", "cdx-milestone--completed"), this.data.completed) {
+      this.wrapper.classList.add("cdx-milestone--completed");
+      return;
+    }
     const t = this.fieldEls.get("time"), n = t ? v(t) : "";
     if (!n || !y(n))
       return;
@@ -1065,7 +1075,7 @@ class sn {
     return n ? v(n) : "";
   }
   setFieldFromText(t, n) {
-    const i = this.fieldEls.get(t), s = C(n);
+    const i = this.fieldEls.get(t), s = O(n);
     this.data[t] = s, i && (i.innerHTML = s, t === "time" && (y(n) ? i.classList.remove(this.css.valueInvalid) : i.classList.add(this.css.valueInvalid), this.updateUrgency()));
   }
   getPeopleCache() {
