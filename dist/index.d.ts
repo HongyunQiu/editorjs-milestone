@@ -1,7 +1,12 @@
 import { API, BlockAPI, BlockTool, ToolConfig, SanitizerConfig } from '@editorjs/editorjs';
 
+export interface MilestoneUserLabel {
+    id: number;
+    label: string;
+}
 export interface MilestoneConfig extends ToolConfig {
     contentPlaceholder?: string;
+    startTimePlaceholder?: string;
     timePlaceholder?: string;
     peoplePlaceholder?: string;
     projectNamePlaceholder?: string;
@@ -30,13 +35,34 @@ export interface MilestoneConfig extends ToolConfig {
             label: string;
         }>;
     }>;
+    /**
+     * 获取当前登录用户（用于“创建人/确认人/已完成权限控制”）
+     * - label: 用户展示名（通常为 full_name）
+     */
+    getCurrentUser?: () => MilestoneUserLabel | null;
 }
 export interface MilestoneData {
     content: string;
+    /**
+     * 项目开始时间（YYYY-MM-DD）
+     */
+    startTime?: string;
+    /**
+     * 项目节点时间（YYYY-MM-DD）
+     */
     time: string;
     people: string;
     projectName: string;
     completed?: boolean;
+    /**
+     * 里程碑创建人：由工具自动写入，不允许手工编辑
+     */
+    creator?: MilestoneUserLabel;
+    /**
+     * 里程碑确认人：可多选；仅创建人可修改
+     * - 只有 confirmers 中包含的人员，才有权限勾选“已完成”
+     */
+    confirmers?: MilestoneUserLabel[];
 }
 interface MilestoneParams {
     data: MilestoneData;
@@ -63,15 +89,19 @@ export default class Milestone implements BlockTool {
     private timePickerInput?;
     private peopleBtn?;
     private projectBtn?;
+    private confirmersBtn?;
+    private confirmersValueEl?;
+    private creatorValueEl?;
+    private completedCheckboxEl?;
     private chooserEl?;
     private chooserInputEl?;
     private chooserListEl?;
     private chooserTitleEl?;
     private chooserFooterEl?;
-    private chooserHintEl?;
     private chooserMode;
     private selectedPeople;
     private selectedProject;
+    private selectedConfirmers;
     private lastChooserQueryTs;
     static get toolbox(): {
         title: string;
@@ -84,6 +114,7 @@ export default class Milestone implements BlockTool {
     validate(savedData: MilestoneData): boolean;
     private buildChooser;
     private openChooser;
+    private adjustChooserPosition;
     private closeChooser;
     /**
      * 根据日期差值更新组件整体颜色状态
@@ -92,15 +123,28 @@ export default class Milestone implements BlockTool {
     private updateBtnStates;
     private openPeopleChooser;
     private openProjectChooser;
+    private openConfirmersChooser;
+    private getCurrentUser;
     private getTextFieldValue;
     private setFieldFromText;
+    /**
+     * 仅当“开始时间”和“节点时间”都填写且格式合法时，校验节点时间 >= 开始时间
+     * 不满足则将节点时间标红（不影响开始时间本身的格式错误样式）
+     */
+    private updateDateConsistency;
     private peopleCache;
     private peopleLoading;
     private getPeopleCache;
     private ensurePeopleLoaded;
     private renderPeopleFooter;
+    private ensurePeopleLoadedForConfirmers;
+    private renderConfirmersFooter;
     private renderPeopleList;
+    private renderConfirmersList;
     private parsePeopleToSet;
+    private refreshConfirmersValueUI;
+    private canToggleCompleted;
+    private refreshCompletedPermissionUI;
     private renderProjectFooter;
     private queryAndRenderProjects;
     private renderProjectList;

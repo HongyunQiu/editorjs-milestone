@@ -102,6 +102,30 @@
   color: var(--milestone-accent);
 }
 
+.cdx-milestone__dates {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.cdx-milestone__date-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+}
+
+.cdx-milestone__sub-label {
+  flex: 0 0 auto;
+  color: var(--milestone-muted);
+  font-size: 12px;
+  line-height: 1.4;
+  white-space: nowrap;
+  user-select: none;
+}
+
 .cdx-milestone__value {
   position: relative;
   flex: 1 1 auto;
@@ -118,7 +142,22 @@
   color: var(--milestone-text);
 }
 
+.cdx-milestone__value--people {
+  flex: 1 1 auto;
+  min-width: 160px;
+}
+
+.cdx-milestone__value--project {
+  flex: 0 1 140px;
+  min-width: 110px;
+}
+
 .cdx-milestone__value--invalid {
+  border-bottom-color: #ef4444 !important;
+  color: #ef4444 !important;
+}
+
+.cdx-milestone__value--inconsistent {
   border-bottom-color: #ef4444 !important;
   color: #ef4444 !important;
 }
@@ -176,6 +215,11 @@
   box-shadow: 0 0 0 3px var(--milestone-focus-ring);
 }
 
+.cdx-milestone__chip-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .cdx-milestone__chooser {
   position: absolute;
   left: 12px;
@@ -220,19 +264,23 @@
 .cdx-milestone__chooser[data-mode="project"] .cdx-milestone__chooser-input,
 .cdx-milestone__chooser[data-mode="project"] .cdx-milestone__chooser-close,
 .cdx-milestone__chooser[data-mode="people"] .cdx-milestone__chooser-input,
-.cdx-milestone__chooser[data-mode="people"] .cdx-milestone__chooser-footer {
+.cdx-milestone__chooser[data-mode="people"] .cdx-milestone__chooser-footer,
+.cdx-milestone__chooser[data-mode="confirmers"] .cdx-milestone__chooser-input,
+.cdx-milestone__chooser[data-mode="confirmers"] .cdx-milestone__chooser-footer {
   display: none;
 }
 
 .cdx-milestone__chooser[data-mode="project"] .cdx-milestone__chooser-list,
-.cdx-milestone__chooser[data-mode="people"] .cdx-milestone__chooser-list {
+.cdx-milestone__chooser[data-mode="people"] .cdx-milestone__chooser-list,
+.cdx-milestone__chooser[data-mode="confirmers"] .cdx-milestone__chooser-list {
   display: flex;
   flex-wrap: wrap;
   gap: 6px 8px;
 }
 
 .cdx-milestone__chooser[data-mode="project"] .cdx-milestone__chooser-item,
-.cdx-milestone__chooser[data-mode="people"] .cdx-milestone__chooser-item {
+.cdx-milestone__chooser[data-mode="people"] .cdx-milestone__chooser-item,
+.cdx-milestone__chooser[data-mode="confirmers"] .cdx-milestone__chooser-item {
   width: fit-content;
   max-width: 100%;
   display: inline-flex;
@@ -343,6 +391,43 @@
   justify-content: space-between;
 }
 
+.cdx-milestone__meta-left {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  flex-wrap: wrap;
+}
+
+.cdx-milestone__meta-tip {
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.cdx-milestone__meta-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.cdx-milestone__meta-label {
+  color: #64748b;
+  white-space: nowrap;
+}
+
+.cdx-milestone__meta-value {
+  color: var(--milestone-text);
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cdx-milestone__meta-value.is-empty {
+  color: rgba(100, 116, 139, 0.75);
+}
+
 .cdx-milestone__completed-toggle {
   display: inline-flex;
   align-items: center;
@@ -357,6 +442,10 @@
   margin: 0;
   width: 14px;
   height: 14px;
+}
+
+.cdx-milestone__completed-toggle input:disabled {
+  cursor: not-allowed;
 }
 
 @media (max-width: 1100px) {
